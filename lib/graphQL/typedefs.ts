@@ -1,3 +1,4 @@
+import { typeDefs } from ".";
 // This file contains the TypeDefs for our GraphQL server.
 // TypeDefs define the types of data that our GraphQL server can serve.
 
@@ -10,6 +11,152 @@ import { gql } from "apollo-server";
 // Object types represent complex objects that can be composed of other types.
 // The ! after a type means that the field is required.
 module.exports = gql`
+
+  type Game {}
+
+  type Category {}
+
+  type User {
+
+    id: ID!
+
+    name: String!
+
+    username: String!
+
+    email: String!
+
+    password: String!
+
+    token: String!
+
+    createdAt: String!
+
+    likes: [Like]
+
+    mods: [Mod]
+  }
+
+  type Like {
+
+    id: ID!
+
+    createdAt: String!
+
+    username: String!
+  }
+
+  type Comment {
+
+    id: ID!
+
+    body: String!
+
+    createdAt: String!
+
+    username: String!
+
+    like: [Like]!
+  }
+
+  type Mod {
+
+    id: ID!
+
+    name: String!
+
+    description: String!
+
+    avatar: String!
+
+    banner: String!
+
+    like: [Like]!
+
+    likeCount: Number!
+
+    size: Number!
+
+    version: String!
+
+    from: User || Organization!
+
+    game: Game!
+
+    category: String!
+
+    createdAt: String!
+
+    lastUpdate: String!
+
+    tags: [String]!
+
+  }
+
+  type Post {
+
+    id: ID!
+
+    title: String!
+
+    content: String!
+
+    image: String!
+
+    video: String!
+
+    createdAt: String!
+
+    comments: [Comment]!
+
+    from: User || Organization!
+  }
+
+  type Organization {
+
+    id: ID!
+
+    name: String!
+
+    description: String!
+
+    avatar: String!
+
+    banner: String!
+
+    games: String!
+
+    email: String!
+
+    website: String!
+
+    location: String!
+
+    password: String!
+
+    token: String!
+
+    posts: [Post]
+
+    followers: [User]
+
+    mods: [Mod]
+
+    following: Int!
+
+    likes: [like]
+
+    likeCount: Number!
+
+    comments: [Comment]
+
+    followers: [User]
+
+    members: [User]
+
+    createdAt: String!
+  }
+
   type Query {
     getPosts: [Post]
 
@@ -24,37 +171,34 @@ module.exports = gql`
     getOrganization(id: username): User!
   }
 
-  // The Mutation type defines the available mutations on our GraphQL server.
-  // Each mutation is defined as a field with a name and a return type.
-  // Mutations are used to modify data on the server.
   type Mutation {
-    createPost(input: PostInput): Post
+    createPost(input: PostInput): Post!
 
-    updatePost(id: ID!, input: PostInput): Post
+    updatePost(id: ID!, input: PostInput): Post!
 
-    deletePost(id: ID!): Post
+    deletePost(id: ID!): Post!
 
-    createMod
+    createMod(body: mod!): Mod!
 
-    deleteMod
+    deleteMod(modId: modId!): String!
 
-    updateMod
+    updateMod(modId: ModId!): Mod!
 
-    createOrganization
+    createOrganization(userId: ID!): Organization!
 
-    deleteOrganization
+    deleteOrganization(organizationId: ID!): Organization!
 
-    addMemberToOrganization
+    addMemberToOrganization(organizationId: ID!, userId: ID!): User!
 
-    deleteMemberToOrganization
+    deleteMemberToOrganization(organizationId: ID!, userId: ID!): User!
 
-    likePost
+    likePost(postId: ID!): Post!
 
-    likeMod(modId: ModId): ModId
+    likeMod(modId: ModId!): Mod!
 
-    likeOrganization(orgId: OrganizationId): Organization!
+    likeOrganization(orgId: OrganizationId!): Organization!
 
-    likeUser(userId: UserId): User!
+    likeUser(userId: UserId!): User!
 
     register(registerInput: RegisterInput): User!
 
@@ -66,9 +210,6 @@ module.exports = gql`
     ): User!
   }
 
-  // The Subscription type defines the available subscriptions on our GraphQL server.
-  // Each subscription is defined as a field with a name and a return type.
-  // Subscriptions allow clients to receive real-time updates from the server.
   type Subscription {
     newPost: Post!
 
@@ -76,4 +217,4 @@ module.exports = gql`
 
     newMessage: Message
   }
-`
+`;
